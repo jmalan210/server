@@ -28,7 +28,7 @@ app.get("/birds/:type", async (req, res) => {
         type === "recent"
             ? "data/obs/geo/recent"
             : "data/obs/geo/recent/notable";
-    const url = `${EBIRD_BASE}${endpoint}?lat=${lat}&lng=${lng}`;
+    const url = `${EBIRD_BASE}/${endpoint}?lat=${lat}&lng=${lng}`;
 
 
    
