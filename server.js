@@ -7,11 +7,23 @@ const app = express();
 
 app.use(cors());
 
+const EBIRD_BASE = "https://api.ebird.org/v2";
 const EBIRD_API_KEY = process.env.EBIRD_API_KEY;
 
-app.get("/", async (req, res) => {
+app.get("/", (req, res) => {
+    console.log("HIT /");
+    res.send("Server is alive");
+})
 
-    try {const response = await fetch("https://api.ebird.org/v2/data/obs/US-CA/recent", {
+app.get("/birds/recent", async (req, res) => {
+
+    
+    console.log("HIT/birds/recent");
+    console.log(req.query);
+    const { lat, lng } = req.query;
+    const url = `${EBIRD_BASE}/data/obs/geo/recent?lat=${lat}&lng=${lng}`;
+
+    try {const response = await fetch(url, {
     headers: { "X-eBirdApiToken": EBIRD_API_KEY }
     });
 
