@@ -3,15 +3,16 @@ require('dotenv').config();
 const express = require("express");
 const cors = require("cors");
 
-const app = express;
+const app = express();
 
 app.use(cors());
 
 const EBIRD_API_KEY = process.env.EBIRD_API_KEY;
 
 app.get("/birds", async (req, res) => {
-        try {const response = await fetch("https://api.ebird.org/v2/data/obs/US-CA/recent", {
-        headers: { "X-eBirdAPIToken": EBIRD_API_KEY }
+
+    try {const response = await fetch("https://api.ebird.org/v2/data/obs/US-CA/recent", {
+    headers: { "X-eBirdApiToken": EBIRD_API_KEY }
     });
 
     const birds = await response.json();
