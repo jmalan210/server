@@ -15,12 +15,14 @@ app.get("/", (req, res) => {
     res.send("Server is alive");
 })
 
-app.get("/birds/recent", async (req, res) => {
+    app.get("/birds/recent", async (req, res) => {
 
     
     console.log("HIT/birds/recent");
     console.log(req.query);
-    const { lat, lng } = req.query;
+        const { lat, lng } = req.query;
+        lat = Number(lat);
+        lng = Number(lng);
     const url = `${EBIRD_BASE}/data/obs/geo/recent?lat=${lat}&lng=${lng}`;
 
     try {const response = await fetch(url, {
