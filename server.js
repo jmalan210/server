@@ -20,7 +20,7 @@ app.get("/", (req, res) => {
     
     console.log("HIT/birds/recent");
     console.log(req.query);
-        const { lat, lng } = req.query;
+        let { lat, lng } = req.query;
         lat = Number(lat);
         lng = Number(lng);
     const url = `${EBIRD_BASE}/data/obs/geo/recent?lat=${lat}&lng=${lng}`;
