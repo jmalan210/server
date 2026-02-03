@@ -9,7 +9,7 @@ app.use(cors());
 
 const EBIRD_API_KEY = process.env.EBIRD_API_KEY;
 
-app.get("/birds", async (req, res) => {
+app.get("/", async (req, res) => {
 
     try {const response = await fetch("https://api.ebird.org/v2/data/obs/US-CA/recent", {
     headers: { "X-eBirdApiToken": EBIRD_API_KEY }
