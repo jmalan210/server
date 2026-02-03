@@ -12,21 +12,26 @@ const EBIRD_API_KEY = process.env.EBIRD_API_KEY;
 
 
 
-    app.get("/birds", async (req, res) => {
+app.get("/birds/:type", async (req, res) => {
+    const { type } = req.params;
         let { lat, lng } = req.query;
         lat = Number(lat);
         lng = Number(lng);
-        const url = `${EBIRD_BASE}/data/obs/geo/recent?lat=${lat}&lng=${lng}`;
+        
 
-        let endpoint;
-        switch (type) {
-            case "recent":
-                endpoint = "data/obs/geo/recent";
-                break;
-            case "recent-notable":
-                endpoint = "data/obs/geo/recent/notable";
-        }
+    const types = ["recent", "recent-notable"];
+    if (!types.includes(type)) {
+        return res.status(400).json({ error: "Invalid type" });
+    }
+    
+        const endpoint=
+        type === "recent"
+            ? "data/obs/geo/recent"
+            : "data/obs/geo/recent/notable";
+    const url = `${EBIRD_BASE}${endpoint}?lat=${lat}&lng=${lng}`;
 
+
+   
     try {const response = await fetch(url, {
     headers: { "X-eBirdApiToken": EBIRD_API_KEY }
     });
