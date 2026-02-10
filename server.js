@@ -27,8 +27,8 @@ app.get("/api/us-notable-birds/", async (req, res) => {
 
         //sends a random bird back so that everyone gets the same bird for the day
         const today = new Date().toISOString().slice(0, 10);
-        let seed = 0;
-        for (let c of today) seed += c.charCodeAt(0);
+        const seed = parseInt(today.replace(/-/g, ''), 10);
+       
 
         const index = seed % birds.length;
         const birdOfDay = birds[index];
