@@ -7,42 +7,41 @@ const app = express();
 
 app.use(cors());
 
-const EBIRD_BASE = "https://api.ebird.org/v2";
+
 const EBIRD_API_KEY = process.env.EBIRD_API_KEY;
 
 
 
-app.get("/birds/:type", async (req, res) => {
-    const { type } = req.params;
-        let { lat, lng } = req.query;
-        lat = Number(lat);
-        lng = Number(lng);
-        
+app.get("//api/us-notable-birds/", async (req, res) => {
 
-    const types = ["recent", "recent-notable"];
-    if (!types.includes(type)) {
-        return res.status(400).json({ error: "Invalid type" });
+    try {
+        const response = await fetch(
+            "https://api.ebird.org/v2/data/obs/US/recent/notable",
+            {
+                headers: { "X-eBirdApiToken": EBIRD_API_KEY }
+            });
+
+        const birds = await response.json();
+  
+        if (!birds.length) return res.status(404).json({ error: "No birds found" });
+
+        //sends a random bird back so that everyone gets the same bird for the day
+        const today = new Date().toISOString().slice(0, 10);
+        let seed = 0;
+        for (let c of today) seed += c.charCodeAt(0);
+
+        const index = seed % birds.length;
+        const birdOfDay = birds[index];
+
+        res.json(birdOfDay);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Server error" });
     }
-    
-        const endpoint=
-        type === "recent"
-            ? "data/obs/geo/recent"
-            : "data/obs/geo/recent/notable";
-    const url = `${EBIRD_BASE}/${endpoint}?lat=${lat}&lng=${lng}&back=7&maxResults=30`;
 
+});
 
    
-    try {const response = await fetch(url, {
-    headers: { "X-eBirdApiToken": EBIRD_API_KEY }
-    });
-
-    const birds = await response.json();
-    res.json(birds);
-} catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Failed to fetch from eBird" });
-}
-});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
