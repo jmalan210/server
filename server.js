@@ -12,7 +12,7 @@ const EBIRD_API_KEY = process.env.EBIRD_API_KEY;
 
 
 
-app.get("//api/us-notable-birds/", async (req, res) => {
+app.get("/api/us-notable-birds/", async (req, res) => {
 
     try {
         const response = await fetch(
